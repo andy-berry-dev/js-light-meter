@@ -66,7 +66,7 @@
 
 		this.queue = new Array();
 		this.interval = -1;
-		this.endOfQueueValue = -1;
+		this.curLightValue = -1;
 	}
 	lights.prototype.redraw = function()
 	{
@@ -88,21 +88,21 @@
 			pushMethod.call(this, noop, []);
 		}
 	}
-	lights.prototype.flashUpTo = function(start, val) {
+	lights.prototype.flashUpTo = function(val) {
+		var startVal = this.getValue();
 		var limit = val || this.numberOfLights;
-		var startVal = start || 0;
 		for (var lightNum = startVal; lightNum <= limit; lightNum++) {
-			pushMethod.call(this, setValue, [lightNum]);
+			pushMethod.call(this, setValue, lightNum);
 		}
-		setEndOfQueueValue.call(this, limit);
+		this.curLightValue = limit;
 	}
-	lights.prototype.flashDownTo = function(start, val) {
-		var limit = (val || 0);
-		var startVal = (start!=undefined) ? start : this.numberOfLights -1;
+	lights.prototype.flashDownTo = function(val) {
+		var startVal = this.getValue();
+		var limit = val || 0;
 		for (var lightNum = startVal; lightNum >= limit; lightNum--) {
-			pushMethod.call(this, setValue, [lightNum]);
+			pushMethod.call(this, setValue, lightNum);
 		}
-		setEndOfQueueValue.call(this, limit);
+		this.curLightValue = limit;
 	}
 	lights.prototype.flashTo = function(start, val) {
 		val = Math.max(0, val);
@@ -118,7 +118,11 @@
 		this.flashTo(curValue, newValue);
 	}
 	lights.prototype.getValue = function() {
-		return this.endOfQueueValue;
+		return this.curLightValue;
+	}
+	lights.prototype.setValue = function(val) {
+		setValue.call(this, val);
+		this.redraw();
 	}
 	lights.prototype.blinkLight = function(count) {
 		var blinkCount = count || 5;
@@ -167,9 +171,6 @@
 			var light = this.lights[lightNum];
 			light.state = (lightNum < value) ? "on" : "off";
 		}
-	}
-	var setEndOfQueueValue = function(val) {
-		this.endOfQueueValue = val;
 	}
 	var draw = function() {
 		this.canvasElement.clearCanvas();
