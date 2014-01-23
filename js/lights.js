@@ -54,91 +54,42 @@
 		this.interval = -1;
 		this.endOfQueueValue = -1;
 	}
-	lights.prototype._processQueue = function() {
-		if (this.queue.length > 0) {
-			var method = this.queue.shift();
-			if (method) {
-				method.bind(this).call();
-				this.draw();
-			}
-		} else {
-			this._stopProcessing();
-		}
+	lights.prototype.redraw = function()
+	{
+		draw.call(this);
 	}
-	lights.prototype._startProcessing = function() {
-		this.draw();
-		if (this.interval == -1) {
-			this.interval = setInterval(this._processQueue.bind(this), this.UPDATE_INTERVAL);
-		}
-	}
-	lights.prototype._stopProcessing = function() {
-		if (this.interval != -1) {
-			clearInterval(this.interval)
-			this.interval = -1;
-		}
-	}
-	lights.prototype._pushMethod = function(fn, params) {
-		this.queue.push( function() {
-	    	fn.bind(this).apply(window, params);
-		});
-		this._startProcessing();
-	}
-	lights.prototype._setValue = function(value) {
-		var theValue = value || 0;
-		theValue = (theValue < 0) ? 0 : theValue;
-		for (var lightNum = 0; lightNum < this.lights.length; lightNum++) {
-			var light = this.lights[lightNum];
-			light.state = (lightNum < value) ? "on" : "off";
-		}
-	}
-	lights.prototype._setEndOfQueueValue = function(val) {
-		this.endOfQueueValue = val;
-	}
-	lights.prototype.draw = function() {
-		this.canvasElement.clearCanvas();
-		for (var lightNum = 0; lightNum < this.lights.length; lightNum++) {
-			var light = this.lights[lightNum];
-			this.canvasElement.drawArc({
-				strokeStyle: light.strokeStyle,
-				fillStyle: (light.state == "on") ? light.colour : "none",
-				x: light.x, 
-				y: light.y,
-				radius: light.radius
-			})
-		}
-	}
-	lights.prototype._noop = function() { }
-
+	
 	lights.prototype.setInterval = function(interval) {
-		this._pushMethod(function() {
+		var intervalMethod = function() {
 			this.UPDATE_INTERVAL = interval;
-			this._stopProcessing();
-			this._startProcessing();
-		}, []);
+			stopProcessing.call(this);
+			startProcessing.call(this);
+		};
+		pushMethod.call(this, intervalMethod, []);
 	}
 	lights.prototype.getInterval = function() {
 		return this.UPDATE_INTERVAL;
 	}
 	lights.prototype.pauseFor = function(val) {
 		for (var i = 0; i < val; i++) {
-			this._pushMethod(this._noop, []);
+			pushMethod.call(this, noop, []);
 		}
 	}
 	lights.prototype.flashUpTo = function(start, val) {
 		var limit = val || this.NUMBER_OF_LIGHTS;
 		var startVal = start || 0;
 		for (var lightNum = startVal; lightNum <= limit; lightNum++) {
-			this._pushMethod( this._setValue, [lightNum]);
+			pushMethod.call(this, setValue, [lightNum]);
 		}
-		this._setEndOfQueueValue(limit);
+		setEndOfQueueValue.call(this, limit);
 	}
 	lights.prototype.flashDownTo = function(start, val) {
 		var limit = (val || 0);
 		var startVal = (start!=undefined) ? start : this.NUMBER_OF_LIGHTS -1;
 		for (var lightNum = startVal; lightNum >= limit; lightNum--) {
-			this._pushMethod( this._setValue, [lightNum]);
+			pushMethod.call(this, setValue, [lightNum]);
 		}
-		this._setEndOfQueueValue(limit);
+		setEndOfQueueValue.call(this, limit);
 	}
 	lights.prototype.flashTo = function(start, val) {
 		if (val > start) {
@@ -169,7 +120,7 @@
 			.appendTo("#"+this.CANVAS_WRAPPER_ID);
 		this.canvasElement = $("#"+this.CANVAS_ID);
 
-		this._startProcessing();
+		startProcessing.call(this);
 		this.pauseFor(2);
 		var oldInterval = this.getInterval();
 		this.setInterval(30);
@@ -177,6 +128,68 @@
 		this.flashDownTo();
 		this.setInterval(oldInterval);
 	}
+	
+	
+	
+	
+	// private stuff
+	var processQueue = function() {
+		if (this.queue.length > 0) {
+			var method = this.queue.shift();
+			if (method) {
+				method.bind(this).call();
+				draw.call(this);
+			}
+		} else {
+			stopProcessing.call(this);
+		}
+	}
+	var startProcessing = function() {
+		draw.call(this);
+		if (this.interval == -1) {
+			this.interval = setInterval(processQueue.bind(this), this.UPDATE_INTERVAL);
+		}
+	}
+	var stopProcessing = function() {
+		if (this.interval != -1) {
+			clearInterval(this.interval);
+			this.interval = -1;
+		}
+	}
+	var pushMethod = function(fn, params) {
+		this.queue.push( function() {
+			fn.bind(this).call(window, params);
+		});
+		startProcessing.call(this);
+	}
+	var setValue = function(value) {
+		var theValue = value || 0;
+		theValue = (theValue < 0) ? 0 : theValue;
+		for (var lightNum = 0; lightNum < this.lights.length; lightNum++) {
+			var light = this.lights[lightNum];
+			light.state = (lightNum < value) ? "on" : "off";
+		}
+	}
+	var setEndOfQueueValue = function(val) {
+		this.endOfQueueValue = val;
+	}
+	var draw = function() {
+		this.canvasElement.clearCanvas();
+		for (var lightNum = 0; lightNum < this.lights.length; lightNum++) {
+			var light = this.lights[lightNum];
+			this.canvasElement.drawArc({
+				strokeStyle: light.strokeStyle,
+				fillStyle: (light.state == "on") ? light.colour : "none",
+				x: light.x,
+				y: light.y,
+				radius: light.radius
+			})
+		}
+	}
+	var noop = function() { }
+	
+	
+	
 
 	window.lights = new lights();
 	
