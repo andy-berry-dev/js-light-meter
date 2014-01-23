@@ -1,50 +1,64 @@
 (function($, document, window) {
 	"use strict"
 
-	var lights = function()
-	{
-		this.CANVAS_ID = "lightsCanvas";
-		this.CANVAS_WIDTH = 20;
-		this.CANVAS_HEIGHT = 365;
-		this.CANVAS_WRAPPER_ID = "lightsCanvasWrapper";
-		this.NUMBER_OF_LIGHTS = 11;
-		this.LIGHT_RADIUS = 10;
-		this.LIGHT_PADDING = 12;
-		this.UPDATE_INTERVAL = 100;
+	var DEFAULTS = {
+		NUMBER_OF_LIGHTS	:	11,
+		LIGHT_RADIUS		:	10,
+		LIGHT_SPACING		:	12,
+		UPDATE_INTERVAL		:	100,
+		LIGHT_COLOUR_1_MAX	:	3,
+		LIGHT_COLOUR_2_MAX	:	7,
+		LIGHT_COLOUR_1		:	"green",
+		LIGHT_COLOUR_2		:	"orange",
+		LIGHT_COLOUR_3		:	"red",
+		WHITE_LIGHT_COLOR	:	"white"
+	}
 	
-		this.logEnabled = true;
+	
+	var lights = function(lightsCanvas, config)
+	{
+		config = config || {};
+		this.lightX = config.lightX || lightsCanvas.width() / 2;
+		this.numberOfLights = config.numberOfLights || DEFAULTS.NUMBER_OF_LIGHTS;
+		this.lightRadius = config.lightRadius || DEFAULTS.LIGHT_RADIUS;
+		this.lightSpacing = config.lightSpacing || DEFAULTS.LIGHT_SPACING; 
+		this.updateInterval = config.updateInterval || DEFAULTS.UPDATE_INTERVAL;
+		this.lightColour1Max = config.lightColour1Max || DEFAULTS.LIGHT_COLOUR_1_MAX;
+		this.lightColour2Max = config.lightColour2Max || DEFAULTS.LIGHT_COLOUR_2_MAX;
+		this.lightColour3Max = config.lightColour3Max || this.numberOfLights;
+		this.lightColour1 = config.lightColour1 || DEFAULTS.LIGHT_COLOUR_1;
+		this.lightColour2 = config.lightColour2 || DEFAULTS.LIGHT_COLOUR_2;
+		this.lightColour3 = config.lightColour3 || DEFAULTS.LIGHT_COLOUR_3;
+		
+		
+		this.canvasElement = lightsCanvas;
 		
 		this.lights = new Array();
-		for (var i = 0; i < this.NUMBER_OF_LIGHTS; i++) {
-			var thisLightX = this.CANVAS_WIDTH / 2;
-			var thisLightY = ( i * this.LIGHT_PADDING) + ( (i+1) * this.LIGHT_RADIUS * 2);
-			var lightColour;
-	
-			switch(i) {
-				case 0:
-				case 1:
-				case 2:
-				case 3:
-					lightColour = "green";
-					break;
-				case 4:
-				case 5:
-				case 6:
-				case 7:
-					lightColour = "orange";
-					break;
-				case 8:
-				case 9:
-				case 10:
-					lightColour = "red";
-					break;
+		for (var i = 0; i < this.numberOfLights; i++) {
+			var thisLightX = this.lightX;
+			var thisLightY = ( i * this.lightSpacing) + ( (i+1) * this.lightRadius * 2);
+			
+			// TODO: allow an infinite number of light colours and get rid of the ugly if statement
+			var lightColour = DEFAULTS.WHITE_LIGHT_COLOR;
+			if (i <= this.lightColour1Max)
+			{
+				lightColour = this.lightColour1;
 			}
-
-			this.lights[this.NUMBER_OF_LIGHTS - i - 1] = {
+			else if (i <= this.lightColour2Max)
+			{
+				lightColour = this.lightColour2;
+			}
+			else if (i <= this.lightColour3Max)
+			{
+				lightColour = this.lightColour3;
+			}
+			
+			var lightIndex = this.numberOfLights - i - 1; 
+			this.lights[lightIndex] = {
 				"colour" : lightColour,
 				"x" : thisLightX,
 				"y" : thisLightY,
-				"radius" : this.LIGHT_RADIUS,
+				"radius" : this.lightRadius,
 				"strokeStyle" : "#000",
 				"state" : "off"
 			}
@@ -58,17 +72,16 @@
 	{
 		draw.call(this);
 	}
-	
 	lights.prototype.setInterval = function(interval) {
 		var intervalMethod = function() {
-			this.UPDATE_INTERVAL = interval;
+			this.updateInterval = interval;
 			stopProcessing.call(this);
 			startProcessing.call(this);
 		};
 		pushMethod.call(this, intervalMethod, []);
 	}
 	lights.prototype.getInterval = function() {
-		return this.UPDATE_INTERVAL;
+		return this.updateInterval;
 	}
 	lights.prototype.pauseFor = function(val) {
 		for (var i = 0; i < val; i++) {
@@ -76,7 +89,7 @@
 		}
 	}
 	lights.prototype.flashUpTo = function(start, val) {
-		var limit = val || this.NUMBER_OF_LIGHTS;
+		var limit = val || this.numberOfLights;
 		var startVal = start || 0;
 		for (var lightNum = startVal; lightNum <= limit; lightNum++) {
 			pushMethod.call(this, setValue, [lightNum]);
@@ -85,13 +98,14 @@
 	}
 	lights.prototype.flashDownTo = function(start, val) {
 		var limit = (val || 0);
-		var startVal = (start!=undefined) ? start : this.NUMBER_OF_LIGHTS -1;
+		var startVal = (start!=undefined) ? start : this.numberOfLights -1;
 		for (var lightNum = startVal; lightNum >= limit; lightNum--) {
 			pushMethod.call(this, setValue, [lightNum]);
 		}
 		setEndOfQueueValue.call(this, limit);
 	}
 	lights.prototype.flashTo = function(start, val) {
+		val = Math.max(0, val);
 		if (val > start) {
 			this.flashUpTo(start, val);
 		} else {
@@ -112,23 +126,7 @@
 			this.changeValueBy(-1);
 			this.changeValueBy(1);
 		}
-	}
-
-	lights.prototype.init = function() {
-		$("<canvas id='"+this.CANVAS_ID+"' width='"+this.CANVAS_WIDTH+
-			"' height='"+this.CANVAS_HEIGHT+"'></canvas>")
-			.appendTo("#"+this.CANVAS_WRAPPER_ID);
-		this.canvasElement = $("#"+this.CANVAS_ID);
-
-		startProcessing.call(this);
-		this.pauseFor(2);
-		var oldInterval = this.getInterval();
-		this.setInterval(30);
-		this.flashUpTo();
-		this.flashDownTo();
-		this.setInterval(oldInterval);
-	}
-	
+	}	
 	
 	
 	
@@ -147,7 +145,7 @@
 	var startProcessing = function() {
 		draw.call(this);
 		if (this.interval == -1) {
-			this.interval = setInterval(processQueue.bind(this), this.UPDATE_INTERVAL);
+			this.interval = setInterval(processQueue.bind(this), this.updateInterval);
 		}
 	}
 	var stopProcessing = function() {
@@ -191,6 +189,6 @@
 	
 	
 
-	window.lights = new lights();
+	window.Lights = lights;
 	
 })(jQuery, document, window);

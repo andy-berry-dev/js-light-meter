@@ -5,13 +5,17 @@
 
 <body>
 
-<div id="lightsCanvasWrapper"></div>
+<canvas id='lightsCanvas' width='20' height='365'></canvas>
 
 
 <script src="js/jQuery.js"></script>
 <script src="js/jCanvas.js"></script>
 <script src="js/lights.js"></script>
-<script>lights.init();</script>
+<script>
+	var lights = new Lights( $("#lightsCanvas") );
+	lights.flashUpTo();
+	lights.flashDownTo();
+</script>
 
 </body>
 </html>
