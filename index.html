@@ -1,20 +1,59 @@
 <!DOCTYPE html>
 <html>
 
-<link rel="stylesheet" type="text/css" href="css/lights.css">
+<style>
+	canvas {
+		float:left;
+		margin:10px 50px;
+	}
+	#canvas1 {
+		width:20px;
+		height:365px;
+	}
+	#canvas2 {
+		width:200px;
+		height:1000px;
+		background-color:black;
+	}
+	#canvas3 {
+		width:50px;
+		height:1000px;
+		background-color:#ccc;
+	}
+</style>
 
 <body>
 
-<canvas id='lightsCanvas' width='20' height='365'></canvas>
+<h1>JS Canvas Lights</h1>
 
+<canvas id='canvas1' width='20' height='365'></canvas>
+<canvas id='canvas2' width='200' height='1000'></canvas>
+<canvas id='canvas3' width='50' height='1000'></canvas>
 
 <script src="js/jQuery.js"></script>
 <script src="js/jCanvas.js"></script>
 <script src="js/lights.js"></script>
 <script>
-	var lights = new Lights( $("#lightsCanvas") );
-	lights.flashUpTo();
-	lights.flashDownTo();
+	var lights1 = new Lights( $("#canvas1") );
+	lights1.flashUpTo();
+	lights1.flashDownTo();
+
+	var lights2 = new Lights( $("#canvas2"), {
+		lightRadius: 50,
+		numberOfLights: 5,
+		updateInterval: 500
+	} );
+	lights2.flashUpTo();
+	lights2.flashDownTo();
+
+
+	var lights3 = new Lights( $("#canvas3"), {
+		lightRadius: 5,
+		numberOfLights: 25,
+		updateInterval: 100
+	} );
+	lights3.flashUpTo();
+	lights3.flashDownTo();
 </script>
 
 </body>
