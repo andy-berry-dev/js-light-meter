@@ -1,0 +1,22 @@
+
+#content {
+	max-width: 800px;
+	margin:0 auto;
+}
+
+canvas {
+	float:left;
+	margin:10px 50px;
+}
+#canvas1 {
+}
+#canvas2 {
+	background-color:black;
+}
+#canvas3 {
+	background-color:#ccc;
+}
+
+.demo {
+	height:620px;
+}

@@ -116,7 +116,7 @@
 	lights.prototype.flashTo = function(val) {
 		val = Math.max(0, val);
 		var currentVal = this.getValue();
-
+		
 		if (val > currentVal)
 		{
 			this.flashUpTo(val);
@@ -200,9 +200,7 @@
 		}
 	}
 	var noop = function() { }
-
-
-
-	window.Lights = lights;
-
+	
+	window.LightMeter = lights;
+		
 })(jQuery, document, window);
