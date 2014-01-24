@@ -12,8 +12,8 @@
 		LIGHT_COLOUR_1		:	"green",
 		LIGHT_COLOUR_2		:	"orange",
 		LIGHT_COLOUR_3		:	"red",
-		WHITE_LIGHT_COLOR	:	"white",
-		LIGHT_OUTLINE_COLOR	:	"black"
+		WHITE_LIGHT_COLOUR	:	"white",
+		LIGHT_OUTLINE_COLOUR	:	"black"
 	}
 
 
@@ -31,7 +31,7 @@
 		this.lightColour1 = getConfig( config.lightColour1, DEFAULTS.LIGHT_COLOUR_1 );
 		this.lightColour2 = getConfig( config.lightColour2, DEFAULTS.LIGHT_COLOUR_2 );
 		this.lightColour3 = getConfig( config.lightColour3, DEFAULTS.LIGHT_COLOUR_3 );
-		this.lightOutlineColor = getConfig( config.lightOutlineColor, DEFAULTS.LIGHT_OUTLINE_COLOR );
+		this.lightOutlineColour = getConfig( config.lightOutlineColour, DEFAULTS.LIGHT_OUTLINE_COLOUR );
 
 		this.canvasElement = lightsCanvas;
 
@@ -49,7 +49,7 @@
 			var thisLightY = (this.canvasElement.height() - (i * 2 * this.lightRadius)) - this.lightRadius - ((i + 1) * this.lightSpacing);
 
 			// TODO: allow an infinite number of light colours and get rid of the ugly if statement
-			var lightColour = DEFAULTS.WHITE_LIGHT_COLOR;
+			var lightColour = DEFAULTS.WHITE_LIGHT_COLOUR;
 			if (i < this.lightColour1Max)
 			{
 				lightColour = this.lightColour1;
@@ -68,7 +68,7 @@
 				"x" : thisLightX,
 				"y" : thisLightY,
 				"radius" : this.lightRadius,
-				"strokeStyle" : this.lightOutlineColor,
+				"strokeStyle" : this.lightOutlineColour,
 				"state" : "off"
 			}
 		}

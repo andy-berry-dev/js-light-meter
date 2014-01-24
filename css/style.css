@@ -1,12 +1,29 @@
 
+body {
+	background-color:#ccc;
+}
+
 #content {
 	max-width: 800px;
+	padding:20px 30px;
+	background-color:white;
 	margin:0 auto;
 }
 
+.canvas1-wrapper {
+	width:20px;
+}
+.canvas2-wrapper {
+	width:200px;
+}
+.canvas3-wrapper {
+	width:50px;
+}
+
+
 canvas {
 	float:left;
-	margin:10px 50px;
+	margin:10px auto;
 }
 #canvas1 {
 }
@@ -18,5 +35,19 @@ canvas {
 }
 
 .demo {
-	height:620px;
+	height:640px;
+}
+.third-width {
+	width:33%;
+	float: left;
+}
+.row {
+	clear: both;
+	text-align: center;
+}
+.row * {
+	margin: 0;
+}
+.canvas-wrapper {
+	margin:20px auto;
 }
