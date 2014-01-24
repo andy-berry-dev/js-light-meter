@@ -209,6 +209,13 @@ The light for the third set of lights.
 #### lightOutlineColour
 The outline colour for each light.
 
+#### stop
+Stop processing items on the queue.
+
+#### start
+Start processing items on the queue.
+
+
 ## Config Defaults
 
 ```

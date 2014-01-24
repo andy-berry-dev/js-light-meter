@@ -145,6 +145,14 @@
 			this.changeValueBy(-1);
 		}
 	}
+	lights.prototype.stop = function()
+	{
+		stopProcessing.call(this);
+	}
+	lights.prototype.start = function()
+	{
+		startProcessing.call(this);
+	}
 
 
 
