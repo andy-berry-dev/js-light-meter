@@ -2,17 +2,17 @@
 	"use strict"
 
 	var DEFAULTS = {
-		NUMBER_OF_LIGHTS	:	11,
-		LIGHT_RADIUS		:	10,
-		LIGHT_SPACING		:	12,
-		UPDATE_INTERVAL		:	100,
-		LIGHT_X_POSITION	:	undefined, // null == use canvas width / 2
-		LIGHT_COLOUR_1_MAX	:	3,
-		LIGHT_COLOUR_2_MAX	:	7,
-		LIGHT_COLOUR_1		:	"green",
-		LIGHT_COLOUR_2		:	"orange",
-		LIGHT_COLOUR_3		:	"red",
-		WHITE_LIGHT_COLOUR	:	"white",
+		NUMBER_OF_LIGHTS		:	11,
+		LIGHT_RADIUS			:	10,
+		LIGHT_SPACING			:	12,
+		UPDATE_INTERVAL			:	100,
+		LIGHT_X_POSITION		:	undefined, // null == use canvas width / 2
+		LIGHT_COLOUR_1_MAX		:	3,
+		LIGHT_COLOUR_2_MAX		:	7,
+		LIGHT_COLOUR_1			:	"green",
+		LIGHT_COLOUR_2			:	"orange",
+		LIGHT_COLOUR_3			:	"red",
+		WHITE_LIGHT_COLOUR		:	"white",
 		LIGHT_OUTLINE_COLOUR	:	"black"
 	}
 
