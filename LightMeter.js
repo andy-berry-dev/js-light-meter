@@ -6,7 +6,7 @@
 		LIGHT_RADIUS		:	10,
 		LIGHT_SPACING		:	12,
 		UPDATE_INTERVAL		:	100,
-		LIGHT_X_POSITION	:	-1, // -1 == use canvas width / 2
+		LIGHT_X_POSITION	:	undefined, // null == use canvas width / 2
 		LIGHT_COLOUR_1_MAX	:	3,
 		LIGHT_COLOUR_2_MAX	:	7,
 		LIGHT_COLOUR_1		:	"green",
@@ -20,18 +20,18 @@
 	var lights = function(lightsCanvas, config)
 	{
 		config = config || {};
-		this.lightXPosition = config.lightXPosition || DEFAULTS.LIGHT_X_POSITION;
-		this.numberOfLights = config.numberOfLights || DEFAULTS.NUMBER_OF_LIGHTS;
-		this.lightRadius = config.lightRadius || DEFAULTS.LIGHT_RADIUS;
-		this.lightSpacing = config.lightSpacing || DEFAULTS.LIGHT_SPACING;
-		this.updateInterval = config.updateInterval || DEFAULTS.UPDATE_INTERVAL;
-		this.lightColour1Max = config.lightColour1Max || DEFAULTS.LIGHT_COLOUR_1_MAX;
-		this.lightColour2Max = config.lightColour2Max || DEFAULTS.LIGHT_COLOUR_2_MAX;
-		this.lightColour3Max = config.lightColour3Max || this.numberOfLights;
-		this.lightColour1 = config.lightColour1 || DEFAULTS.LIGHT_COLOUR_1;
-		this.lightColour2 = config.lightColour2 || DEFAULTS.LIGHT_COLOUR_2;
-		this.lightColour3 = config.lightColour3 || DEFAULTS.LIGHT_COLOUR_3;
-		this.lightOutlineColor = config.lightOutlineColor || DEFAULTS.LIGHT_OUTLINE_COLOR;
+		this.lightXPosition = getConfig( config.lightXPosition, DEFAULTS.LIGHT_X_POSITION );
+		this.numberOfLights = getConfig( config.numberOfLights, DEFAULTS.NUMBER_OF_LIGHTS );
+		this.lightRadius = getConfig( config.lightRadius, DEFAULTS.LIGHT_RADIUS );
+		this.lightSpacing = getConfig( config.lightSpacing, DEFAULTS.LIGHT_SPACING );
+		this.updateInterval = getConfig( config.updateInterval, DEFAULTS.UPDATE_INTERVAL );
+		this.lightColour1Max = getConfig( config.lightColour1Max, DEFAULTS.LIGHT_COLOUR_1_MAX );
+		this.lightColour2Max = getConfig( config.lightColour2Max, DEFAULTS.LIGHT_COLOUR_2_MAX );
+		this.lightColour3Max = getConfig( config.lightColour3Max, this.numberOfLights );
+		this.lightColour1 = getConfig( config.lightColour1, DEFAULTS.LIGHT_COLOUR_1 );
+		this.lightColour2 = getConfig( config.lightColour2, DEFAULTS.LIGHT_COLOUR_2 );
+		this.lightColour3 = getConfig( config.lightColour3, DEFAULTS.LIGHT_COLOUR_3 );
+		this.lightOutlineColor = getConfig( config.lightOutlineColor, DEFAULTS.LIGHT_OUTLINE_COLOR );
 
 		this.canvasElement = lightsCanvas;
 
@@ -41,7 +41,7 @@
 		this.lights = new Array();
 		for (var i = 0; i < this.numberOfLights; i++) {
 			var thisLightX = this.lightXPosition;
-			if (thisLightX < 0)
+			if (thisLightX == undefined)
 			{
 				thisLightX = this.canvasElement.width() / 2;
 			}
@@ -141,14 +141,22 @@
 	lights.prototype.blinkLight = function(count) {
 		var blinkCount = count || 5;
 		for (var i = 0; i < blinkCount; i++) {
-			this.changeValueBy(-1);
 			this.changeValueBy(1);
+			this.changeValueBy(-1);
 		}
 	}
 
 
 
 	// private stuff
+	var getConfig = function(configValue, defaultValue)
+	{
+		if (configValue == undefined)
+		{
+			return defaultValue;
+		}
+		return configValue;
+	}
 	var processQueue = function() {
 		if (this.queue.length > 0) {
 			var method = this.queue.shift();
