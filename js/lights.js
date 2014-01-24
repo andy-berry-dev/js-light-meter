@@ -46,29 +46,24 @@
 				thisLightX = this.canvasElement.width() / 2;
 			}
 			
-			
-			
-			var thisLightY = this.canvasElement.height();
-			thisLightY -= (this.numberOfLights - i) * this.lightSpacing;
-			thisLightY -= ( (this.numberOfLights - i) * this.lightRadius * 2) - this.lightRadius;
+			var thisLightY = (this.canvasElement.height() - (i * 2 * this.lightRadius)) - this.lightRadius - ((i + 1) * this.lightSpacing);
 			
 			// TODO: allow an infinite number of light colours and get rid of the ugly if statement
 			var lightColour = DEFAULTS.WHITE_LIGHT_COLOR;
-			if (i <= this.lightColour1Max)
+			if (i < this.lightColour1Max)
 			{
 				lightColour = this.lightColour1;
 			}
-			else if (i <= this.lightColour2Max)
+			else if (i < this.lightColour2Max)
 			{
 				lightColour = this.lightColour2;
 			}
-			else if (i <= this.lightColour3Max)
+			else if (i < this.lightColour3Max)
 			{
 				lightColour = this.lightColour3;
 			}
-			
-			var lightIndex = this.numberOfLights - i - 1; 
-			this.lights[lightIndex] = {
+			 
+			this.lights[i] = {
 				"colour" : lightColour,
 				"x" : thisLightX,
 				"y" : thisLightY,
@@ -118,12 +113,12 @@
 		}
 		this.curLightValue = limit;
 	}
-	lights.prototype.flashTo = function(start, val) {
+	lights.prototype.flashTo = function(val) {
 		val = Math.max(0, val);
 		if (val > start) {
-			this.flashUpTo(start, val);
+			this.flashUpTo(val);
 		} else {
-			this.flashDownTo(start, val);
+			this.flashDownTo(val);
 		}
 	}
 	lights.prototype.changeValueBy = function(diff) {
