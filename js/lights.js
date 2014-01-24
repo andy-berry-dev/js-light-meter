@@ -6,19 +6,21 @@
 		LIGHT_RADIUS		:	10,
 		LIGHT_SPACING		:	12,
 		UPDATE_INTERVAL		:	100,
+		LIGHT_X_POSITION	:	-1, // -1 == use canvas width / 2
 		LIGHT_COLOUR_1_MAX	:	3,
 		LIGHT_COLOUR_2_MAX	:	7,
 		LIGHT_COLOUR_1		:	"green",
 		LIGHT_COLOUR_2		:	"orange",
 		LIGHT_COLOUR_3		:	"red",
-		WHITE_LIGHT_COLOR	:	"white"
+		WHITE_LIGHT_COLOR	:	"white",
+		LIGHT_OUTLINE_COLOR	:	"black"
 	}
 	
 	
 	var lights = function(lightsCanvas, config)
 	{
 		config = config || {};
-		this.lightX = config.lightX || lightsCanvas.width() / 2;
+		this.lightXPosition = config.lightXPosition || DEFAULTS.LIGHT_X_POSITION;
 		this.numberOfLights = config.numberOfLights || DEFAULTS.NUMBER_OF_LIGHTS;
 		this.lightRadius = config.lightRadius || DEFAULTS.LIGHT_RADIUS;
 		this.lightSpacing = config.lightSpacing || DEFAULTS.LIGHT_SPACING; 
@@ -29,14 +31,26 @@
 		this.lightColour1 = config.lightColour1 || DEFAULTS.LIGHT_COLOUR_1;
 		this.lightColour2 = config.lightColour2 || DEFAULTS.LIGHT_COLOUR_2;
 		this.lightColour3 = config.lightColour3 || DEFAULTS.LIGHT_COLOUR_3;
-		
+		this.lightOutlineColor = config.lightOutlineColor || DEFAULTS.LIGHT_OUTLINE_COLOR;
 		
 		this.canvasElement = lightsCanvas;
+
+		var canvas = $(this.canvasElement);
+		canvas.width = $(canvas).parent().width();
 		
 		this.lights = new Array();
 		for (var i = 0; i < this.numberOfLights; i++) {
-			var thisLightX = this.lightX;
-			var thisLightY = ( i * this.lightSpacing) + ( (i+1) * this.lightRadius * 2);
+			var thisLightX = this.lightXPosition;
+			if (thisLightX < 0)
+			{
+				thisLightX = this.canvasElement.width() / 2;
+			}
+			
+			
+			
+			var thisLightY = this.canvasElement.height();
+			thisLightY -= (this.numberOfLights - i) * this.lightSpacing;
+			thisLightY -= ( (this.numberOfLights - i) * this.lightRadius * 2) - this.lightRadius;
 			
 			// TODO: allow an infinite number of light colours and get rid of the ugly if statement
 			var lightColour = DEFAULTS.WHITE_LIGHT_COLOR;
@@ -59,7 +73,7 @@
 				"x" : thisLightX,
 				"y" : thisLightY,
 				"radius" : this.lightRadius,
-				"strokeStyle" : "#000",
+				"strokeStyle" : this.lightOutlineColor,
 				"state" : "off"
 			}
 		}

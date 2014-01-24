@@ -7,17 +7,11 @@
 		margin:10px 50px;
 	}
 	#canvas1 {
-		width:20px;
-		height:365px;
 	}
 	#canvas2 {
-		width:200px;
-		height:1000px;
 		background-color:black;
 	}
 	#canvas3 {
-		width:50px;
-		height:1000px;
 		background-color:#ccc;
 	}
 </style>
@@ -27,8 +21,8 @@
 <h1>JS Canvas Lights</h1>
 
 <canvas id='canvas1' width='20' height='365'></canvas>
-<canvas id='canvas2' width='200' height='1000'></canvas>
-<canvas id='canvas3' width='50' height='1000'></canvas>
+<canvas id='canvas2' width='200' height='600'></canvas>
+<canvas id='canvas3' width='50' height='700'></canvas>
 
 <script src="js/jQuery.js"></script>
 <script src="js/jCanvas.js"></script>
@@ -41,7 +35,10 @@
 	var lights2 = new Lights( $("#canvas2"), {
 		lightRadius: 50,
 		numberOfLights: 5,
-		updateInterval: 500
+		updateInterval: 500,
+		lightOutlineColor : "white",
+		lightColour1Max : 2,
+		lightColour2Max : 3
 	} );
 	lights2.flashUpTo();
 	lights2.flashDownTo();
