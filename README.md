@@ -4,13 +4,18 @@ permalink: /index.html
 title: JS Light Meter
 ---
 
-<script src="js-dependencies/jQuery.js"></script>
-<script src="js-dependencies/jCanvas.js"></script>
+<script src="js-dependencies/jquery-1.11.0.min.js"></script>
+<script src="js-dependencies/jcanvas-14.01.22.min.js"></script>
 <script src="LightMeter.js"></script>
 
 # JS Light Meter
 
-A light meter using JavaScript and Canvas. Originally created for an online tool for [TimelessTime](www.timelesstime.co.uk).
+A vertical light meter using JavaScript and HTML5 Canvas. 
+
+- A nicely formatted version of this document is available [here](http://andyberry88.github.io/js-lightmeter/).
+- Source is [here](https://github.com/andyberry88/js-lightmeter).
+
+The library was originally created years ago for an online tool for [TimelessTime](www.timelesstime.co.uk), back in the day when I was new to the world of JavaScript.
 
 ## Dependencies
 - jCanvas
