@@ -15,15 +15,15 @@
 		WHITE_LIGHT_COLOR	:	"white",
 		LIGHT_OUTLINE_COLOR	:	"black"
 	}
-	
-	
+
+
 	var lights = function(lightsCanvas, config)
 	{
 		config = config || {};
 		this.lightXPosition = config.lightXPosition || DEFAULTS.LIGHT_X_POSITION;
 		this.numberOfLights = config.numberOfLights || DEFAULTS.NUMBER_OF_LIGHTS;
 		this.lightRadius = config.lightRadius || DEFAULTS.LIGHT_RADIUS;
-		this.lightSpacing = config.lightSpacing || DEFAULTS.LIGHT_SPACING; 
+		this.lightSpacing = config.lightSpacing || DEFAULTS.LIGHT_SPACING;
 		this.updateInterval = config.updateInterval || DEFAULTS.UPDATE_INTERVAL;
 		this.lightColour1Max = config.lightColour1Max || DEFAULTS.LIGHT_COLOUR_1_MAX;
 		this.lightColour2Max = config.lightColour2Max || DEFAULTS.LIGHT_COLOUR_2_MAX;
@@ -32,12 +32,12 @@
 		this.lightColour2 = config.lightColour2 || DEFAULTS.LIGHT_COLOUR_2;
 		this.lightColour3 = config.lightColour3 || DEFAULTS.LIGHT_COLOUR_3;
 		this.lightOutlineColor = config.lightOutlineColor || DEFAULTS.LIGHT_OUTLINE_COLOR;
-		
+
 		this.canvasElement = lightsCanvas;
 
 		var canvas = $(this.canvasElement);
 		canvas.width = $(canvas).parent().width();
-		
+
 		this.lights = new Array();
 		for (var i = 0; i < this.numberOfLights; i++) {
 			var thisLightX = this.lightXPosition;
@@ -45,9 +45,9 @@
 			{
 				thisLightX = this.canvasElement.width() / 2;
 			}
-			
+
 			var thisLightY = (this.canvasElement.height() - (i * 2 * this.lightRadius)) - this.lightRadius - ((i + 1) * this.lightSpacing);
-			
+
 			// TODO: allow an infinite number of light colours and get rid of the ugly if statement
 			var lightColour = DEFAULTS.WHITE_LIGHT_COLOR;
 			if (i < this.lightColour1Max)
@@ -62,7 +62,7 @@
 			{
 				lightColour = this.lightColour3;
 			}
-			 
+
 			this.lights[i] = {
 				"colour" : lightColour,
 				"x" : thisLightX,
@@ -115,16 +115,21 @@
 	}
 	lights.prototype.flashTo = function(val) {
 		val = Math.max(0, val);
-		if (val > start) {
+		var currentVal = this.getValue();
+
+		if (val > currentVal)
+		{
 			this.flashUpTo(val);
-		} else {
+		}
+		else if (val < currentVal)
+		{
 			this.flashDownTo(val);
 		}
 	}
 	lights.prototype.changeValueBy = function(diff) {
 		var curValue = this.getValue();
 		var newValue = curValue + diff;
-		this.flashTo(curValue, newValue);
+		this.flashTo(newValue);
 	}
 	lights.prototype.getValue = function() {
 		return this.curLightValue;
@@ -139,10 +144,10 @@
 			this.changeValueBy(-1);
 			this.changeValueBy(1);
 		}
-	}	
-	
-	
-	
+	}
+
+
+
 	// private stuff
 	var processQueue = function() {
 		if (this.queue.length > 0) {
@@ -195,10 +200,9 @@
 		}
 	}
 	var noop = function() { }
-	
-	
-	
+
+
 
 	window.Lights = lights;
-	
+
 })(jQuery, document, window);
