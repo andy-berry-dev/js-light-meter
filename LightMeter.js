@@ -75,6 +75,8 @@
 				"strokeStyle" : this._lightOutlineColour,
 				"state" : "off"
 			}
+			
+			this.redraw();
 		}
 	}
 	lights.prototype.redraw = function()
