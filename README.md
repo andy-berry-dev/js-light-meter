@@ -65,7 +65,8 @@ The library was originally created years ago for an online tool for [TimelessTim
 		updateInterval: 500,
 		lightOutlineColour : "white",
 		lightColour1Max : 2,
-		lightColour2Max : 3
+		lightColour2Max : 3,
+		lightOffColour : "gray"
 	} );
 	lights2.flashUpTo();
 	lights2.flashDownTo();
@@ -169,6 +170,12 @@ Returns the value of the lights at the end of the queue (i.e. the value after al
 #### blinkLight ( numberOfTimesToBlink )
 Blinks the light at the value one about the current value the specified number of times.
 
+#### stop
+Stop processing items on the queue.
+
+#### start
+Start processing items on the queue.
+
 
 ## Config
 
@@ -209,12 +216,8 @@ The light for the third set of lights.
 #### lightOutlineColour
 The outline colour for each light.
 
-#### stop
-Stop processing items on the queue.
-
-#### start
-Start processing items on the queue.
-
+#### lightOffColour
+The colour of each light when it's off.
 
 ## Config Defaults
 
@@ -231,5 +234,6 @@ LIGHT_COLOUR_2			:	"orange",
 LIGHT_COLOUR_3			:	"red",
 WHITE_LIGHT_COLOUR		:	"white",
 LIGHT_OUTLINE_COLOUR	:	"black"
+LIGHT_OFF_COLOUR		:	"white"
 ```
 

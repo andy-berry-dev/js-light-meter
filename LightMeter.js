@@ -13,7 +13,8 @@
 		LIGHT_COLOUR_2			:	"orange",
 		LIGHT_COLOUR_3			:	"red",
 		WHITE_LIGHT_COLOUR		:	"white",
-		LIGHT_OUTLINE_COLOUR	:	"black"
+		LIGHT_OUTLINE_COLOUR	:	"black",
+		LIGHT_OFF_COLOUR		:	"white"
 	}
 
 
@@ -32,6 +33,7 @@
 		this._lightColour2 = getConfig( config.lightColour2, DEFAULTS.LIGHT_COLOUR_2 );
 		this._lightColour3 = getConfig( config.lightColour3, DEFAULTS.LIGHT_COLOUR_3 );
 		this._lightOutlineColour = getConfig( config.lightOutlineColour, DEFAULTS.LIGHT_OUTLINE_COLOUR );
+		this._lightOffColour = getConfig( config.lightOffColour, DEFAULTS.LIGHT_OFF_COLOUR );
 
 		this._canvasElement = lightsCanvas;
 
@@ -210,7 +212,7 @@
 			var light = this._lights[lightNum];
 			this._canvasElement.drawArc({
 				strokeStyle: light.strokeStyle,
-				fillStyle: (light.state == "on") ? light.colour : "none",
+				fillStyle: (light.state == "on") ? light.colour : this._lightOffColour,
 				x: light.x,
 				y: light.y,
 				radius: light.radius
