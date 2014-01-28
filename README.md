@@ -12,8 +12,8 @@ title: JS Light Meter
 
 A vertical light meter using JavaScript and HTML5 Canvas. 
 
-- A nicely formatted version of this document is available [here](http://andyberry88.github.io/js-lightmeter/).
-- Source is [here](https://github.com/andyberry88/js-lightmeter).
+- A nicely formatted version of this document is available [here](http://andyberry88.github.io/js-light-meter/).
+- Source code is [here](https://github.com/andyberry88/js-light-meter).
 
 The library was originally created years ago for an online tool for [TimelessTime](www.timelesstime.co.uk), back in the day when I was new to the world of JavaScript.
 
